@@ -7,6 +7,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -26,11 +28,18 @@ class Ticket {
     int price;
 
     public long getFlightDuration() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H:mm");
-        LocalTime departure = LocalTime.parse(departure_time, formatter);
-        LocalTime arrival = LocalTime.parse(arrival_time, formatter);
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yy");
+        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("H:mm");
 
-        return Duration.between(departure, arrival).toMinutes();
+        LocalDate departureDate = LocalDate.parse(departure_date, dateFormatter);
+        LocalTime departureTime = LocalTime.parse(departure_time, timeFormatter);
+        LocalDateTime departureDateTime = LocalDateTime.of(departureDate, departureTime);
+
+        LocalDate arrivalDate = LocalDate.parse(arrival_date, dateFormatter);
+        LocalTime arrivalTime = LocalTime.parse(arrival_time, timeFormatter);
+        LocalDateTime arrivalDateTime = LocalDateTime.of(arrivalDate, arrivalTime);
+
+        return Duration.between(departureDateTime, arrivalDateTime).toMinutes();
     }
 }
 
